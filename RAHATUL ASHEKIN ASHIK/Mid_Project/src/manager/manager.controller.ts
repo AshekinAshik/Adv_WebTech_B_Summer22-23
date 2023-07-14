@@ -3,6 +3,7 @@ import { FileInterceptor } from "@nestjs/platform-express";
 //import session from "express-session";
 import session = require("express-session");
 import { diskStorage, MulterError } from "multer";
+import { TourGuideRegDTO } from "src/tourguide/tourguide.dto";
 import { TravellerRegDTO } from "src/traveller/traveller.dto";
 import { ManagerLoginDTO, ManagerRegDTO, ManagerUpdateDTO } from "./manager.dto";
 import { ManagerService } from "./manager.service";
@@ -92,13 +93,22 @@ export class ManagerController {
 
     @Delete('remove')
     @UseGuards(SessionGuard)
-    removeManager(@Session() session)
+    removeManager(@Session() session) : any {
+        return this.managerService.removeManager(session.username);
+    }
     
-    // @Delete('remove/traveler/:travelerId')
-    // removeTraveler (@Req() request, @Param("travelerId", ParseIntPipe) travelerId:number) : any {
-    //     const managerData:ManagerEntity = request;
-    //     return this.managerService.removeTraveler(managerData, travelerId);
-    // }
+    @Delete('remove/traveller/:travellerId')
+    @UseGuards(SessionGuard)
+    removeTraveller(@Param('travellerId', ParseIntPipe) travellerId:number, @Session() session) : any {
+        return this.managerService.removeTraveller(travellerId, session.username);
+    }
+
+    @Post('register/tourguide')
+    @UsePipes(new ValidationPipe())
+    regTourGuide(@Body() tourguideRegInfo:TourGuideRegDTO) : any {
+        console.log(tourguideRegInfo);
+        return this.managerService.regTourGuide(tourguideRegInfo);
+    }
 
     //MANAGER can only delete TRAVELER where their ID is assocaited
     // @Delete('remove/traveler')

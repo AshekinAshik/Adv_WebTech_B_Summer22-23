@@ -7,7 +7,7 @@ export class TravellerEntity {
     id:number;
     @Column()
     name:string;
-    @Column()
+    @Column({length:80, unique:true})
     username:string;
     @Column()
     email:string;
@@ -22,7 +22,7 @@ export class TravellerEntity {
     @Column({nullable:true})
     managerID:number;
 
-    @ManyToOne(() => ManagerEntity, manager => manager.travellers)
+    @ManyToOne(() => ManagerEntity, manager => manager.travellers, {onDelete:"CASCADE"})
     @JoinColumn({name:'managerID'})
         manager:ManagerEntity;
 }

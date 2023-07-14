@@ -59,3 +59,18 @@ export class ManagerUpdateDTO {
     @IsString({message: "Invalid Password!"})
     password:string;
 }
+
+export class ManagerInfoDTO {
+    id:number;
+
+    @IsString({message: "Invalid Name"})
+    @Matches(/^[a-z A-Z]+$/, {message:"Use Valid Name Format"})
+    @MaxLength(200)
+    name:string;
+
+    @IsEmail({}, {message: "Invalid E-mail!"})
+    email:string;
+
+    @IsInt({message: "Invalid Contact!"})
+    contact:number;
+}
