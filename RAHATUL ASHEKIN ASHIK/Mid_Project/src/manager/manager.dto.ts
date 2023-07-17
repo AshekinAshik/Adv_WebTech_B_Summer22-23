@@ -74,3 +74,37 @@ export class ManagerInfoDTO {
     @IsInt({message: "Invalid Contact!"})
     contact:number;
 }
+
+export class ManagerMessageDTO {
+    @IsString({message: "Invalid Message!"})
+    message:string;
+}
+
+export class addManagerToTourGuideDTO {
+    managerId: number;
+    tourguideId: number;
+}
+
+export class HotelDetailsDTO {
+    id:number;
+    
+    @IsString({message: "Invalid Name"})
+    @Matches(/^[a-z A-Z]+$/, {message:"Use Valid Name Format"})
+    @MaxLength(200)
+    @IsNotEmpty({message: "Name Must be Filled!"})
+    name:string;
+
+    @IsEmail({}, {message: "Invalid E-mail!"})
+    @IsNotEmpty({message: "E-mail Must be Filled!"})
+    email:string;
+
+    @IsInt({message: "Invalid Contact!"})
+    @IsNotEmpty({message: "Contact Must be Filled!"})
+    contact:number;
+
+    @IsString({message: "Invalid Location"})
+    @IsNotEmpty({message: "Location Must be Filled!"})
+    location:string;
+
+    managerId:number;
+}

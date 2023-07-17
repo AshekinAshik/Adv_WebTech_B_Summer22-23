@@ -1,6 +1,6 @@
 import { TourGuideEntity } from "src/tourguide/tourguide.entity";
 import { TravellerEntity } from "src/traveller/traveller.entity";
-import { Column, Entity, JoinTable, ManyToMany, OneToMany, OneToOne, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
 
 // @Entity('Manager_Info')
 // export class ManagerInfoEntity {
@@ -51,13 +51,33 @@ export class ManagerEntity {
             {
                 name:'Manager_TourGuide',
                 joinColumn: {
-                    name:'managerID',
-                    referencedColumnName: 'id'
+                    name:'managerId'
+                    //referencedColumnName: 'id'
                 },
             }
         )
         tourguides: TourGuideEntity[];
-    
-    // @OneToOne(() => ManagerInfoEntity, {eager:true})
-    //     managerInfo:ManagerInfoEntity;
+
+    @OneToMany(() => HotelEntity, hotel => hotel.manager)
+        hotels:HotelEntity[];
+}
+
+@Entity('Hotel')
+export class HotelEntity {
+    @PrimaryGeneratedColumn()
+    id:number;
+    @Column()
+    name:string;
+    @Column()
+    email:string;
+    @Column()
+    contact:number;
+    @Column()
+    location:string;
+    @Column({nullable:true})
+    managerId:number;
+
+    @ManyToOne(() => ManagerEntity, manager => manager.hotels)
+    @JoinColumn({name: 'managerId'})
+        manager:ManagerEntity;
 }

@@ -21,5 +21,5 @@ export class TourGuideEntity {
     password:string;
 
     @ManyToMany(() => ManagerEntity, manager => manager.tourguides)
-    managers: ManagerEntity[];
+        managers: ManagerEntity[];
 }
