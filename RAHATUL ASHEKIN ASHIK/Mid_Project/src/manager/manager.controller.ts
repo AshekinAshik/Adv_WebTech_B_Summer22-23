@@ -1,10 +1,10 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query, Session, UploadedFile, UseGuards, UseInterceptors, UsePipes, ValidationPipe } from "@nestjs/common";
+import { Body, Controller, Delete, ForbiddenException, Get, HttpException, HttpStatus, NotFoundException, Param, ParseIntPipe, Post, Put, Query, Session, UnauthorizedException, UploadedFile, UseGuards, UseInterceptors, UsePipes, ValidationPipe } from "@nestjs/common";
 import { FileInterceptor } from "@nestjs/platform-express";
 //import session from "express-session";
 import session = require("express-session");
 import { diskStorage, MulterError } from "multer";
 import { TourGuideRegDTO, TourGuideUpdateDTO } from "src/tourguide/tourguide.dto";
-import { TravellerRegDTO } from "src/traveller/traveller.dto";
+import { TravellerRegDTO, TravellerTourGuideDTO, TravellerUpdateDTO } from "src/traveller/traveller.dto";
 import { addManagerToTourGuideDTO, HotelDetailsDTO, ManagerLoginDTO, ManagerMessageDTO, ManagerRegDTO, ManagerUpdateDTO } from "./manager.dto";
 import { ManagerService } from "./manager.service";
 import { SessionGuard } from "./session.guard";
@@ -17,7 +17,9 @@ export class ManagerController {
     @UsePipes(new ValidationPipe())
     regManager (@Body() managerRegInfo:ManagerRegDTO) : any {
         console.log(managerRegInfo);
-        return this.managerService.regManager(managerRegInfo);
+        this.managerService.regManager(managerRegInfo);
+        
+        return "Manager Registration Successful!";
     }
 
     @Post('login')
@@ -25,23 +27,12 @@ export class ManagerController {
     async loginManager (@Body() managerLoginInfo:ManagerLoginDTO, @Session() session) {
         console.log(managerLoginInfo);
 
-        //const x = await this.managerService.loginManager(managerLoginInfo);
         if (await this.managerService.loginManager(managerLoginInfo)) {
-            //console.log(x);
             session.username = managerLoginInfo.username;
-            //console.log(session.username);
             return "Manager Login Successful!";
         } else {
             return "Manager Login Failed!";
-        } 
-
-
-        // if (this.managerService.loginManager(managerLoginInfo)) {
-        //     session.username = managerLoginInfo.username;
-        //     return true;
-        // } else {
-        //     return false;
-        // }
+        }
     }
 
     @Put('upload')
@@ -69,39 +60,77 @@ export class ManagerController {
         return this.managerService.uploadManager(fileName, session.username);
     }
 
-    @Post('register/traveller')
-    @UsePipes(new ValidationPipe())
-    @UseGuards(SessionGuard)
-    regTraveller(@Body() travellerRegInfo:TravellerRegDTO, @Session() session) {
-        console.log(travellerRegInfo);
-        return this.managerService.regTraveller(travellerRegInfo, session.username);
-    }
-
-    //MANAGER can only search TRAVELLER by their ID
-    @Get('search/traveller')
-    @UseGuards(SessionGuard)
-    getTravellerByManagerId (@Session() session) : any {
-        return this.managerService.getTravellerByManagerId(session.username);
-    }
-
     @Put('updateinfo')
     @UsePipes(new ValidationPipe())
     @UseGuards(SessionGuard)
     updateManagerInfo(@Body() managerUpdateInfo:ManagerUpdateDTO, @Session() session) : any {
         console.log(managerUpdateInfo);
-        return this.managerService.updateManagerInfo(managerUpdateInfo, session.username);
+        this.managerService.updateManagerInfo(managerUpdateInfo, session.username);
+        
+        return "Manager Update Successful!";
     }
 
-    @Delete('remove')
+    // @Delete('remove')
+    // @UseGuards(SessionGuard)
+    // removeManager(@Session() session) : any {
+    //     return this.managerService.removeManager(session.username);
+    // }
+
+    @Post('register/traveller')
+    @UsePipes(new ValidationPipe())
     @UseGuards(SessionGuard)
-    removeManager(@Session() session) : any {
-        return this.managerService.removeManager(session.username);
+    regTraveller(@Body() travellerRegInfo:TravellerRegDTO, @Session() session) {
+        console.log(travellerRegInfo);
+        this.managerService.regTraveller(travellerRegInfo, session.username);
+
+        return "Traveller Registration Successful!"
+    }
+
+    @Get('search/traveller')
+    @UseGuards(SessionGuard)
+    getTraveller(@Session() session) : any {
+        return this.managerService.getTraveller(session.username);
+    }
+
+    @Get('search/traveller/:travellerId')
+    @UseGuards(SessionGuard)
+    async getTravellerById(@Param("travellerId", ParseIntPipe) travellerId:number, @Session() session) {
+        const res = this.managerService.getTravellerById(travellerId, session.username);
+        if (res !== null) {
+            return res;
+        } else {
+            throw new NotFoundException({
+                status: HttpStatus.NOT_FOUND,
+                message: "Traveller Not Found!"
+            });
+        }
+    }
+
+    @Put('updateinfo/traveller/:travellerId')
+    @UseGuards(SessionGuard)
+    @UsePipes(new ValidationPipe()) 
+    updateTraveller(@Param("travellerId", ParseIntPipe) travellerId:number, @Body() travellerUpdateInfo:TravellerUpdateDTO, @Session() session) {
+        console.log(travellerUpdateInfo);
+        return this.managerService.updateTraveller(travellerId, travellerUpdateInfo, session.username);
+        
+        //return "Traveller Update Successful!";
     }
     
     @Delete('remove/traveller/:travellerId')
     @UseGuards(SessionGuard)
     removeTraveller(@Param('travellerId', ParseIntPipe) travellerId:number, @Session() session) : any {
-        return this.managerService.removeTraveller(travellerId, session.username);
+        this.managerService.removeTraveller(travellerId, session.username);
+
+        return "Traveller Delete Successful!";
+    }
+
+    @Post('sendmail/traveller')
+    @UseGuards(SessionGuard)
+    sendMailToTraveller (@Body() messageInfo:ManagerMessageDTO, @Session() session) {
+        console.log(messageInfo);
+        this.managerService.sendMailToTraveller(messageInfo, session.username);
+
+        return "E-mail Send Successful!";
     }
 
     @Post('register/tourguide')
@@ -109,14 +138,9 @@ export class ManagerController {
     @UseGuards(SessionGuard)
     regTourGuide(@Body() tourguideRegInfo:TourGuideRegDTO, @Session() session) : any {
         console.log(tourguideRegInfo);
-        return this.managerService.regTourGuide(tourguideRegInfo, session.username);
-    }
+        this.managerService.regTourGuide(tourguideRegInfo, session.username);
 
-    @Post('sendmail/traveller')
-    @UseGuards(SessionGuard)
-    sendMailToTraveller (@Body() messageInfo:ManagerMessageDTO, @Session() session) {
-        console.log(messageInfo);
-        return this.managerService.sendMailToTraveller(messageInfo, session.username);
+        return "Tour Guide Registration Successful!";
     }
 
     @Get('gettourguides')
@@ -125,11 +149,10 @@ export class ManagerController {
         return this.managerService.getTourGuidesByManager(session.username);
     }
 
-    @Put('updateinfo/tourguide/:tourGuideId')
+    @Put('assigntourguide')
     @UseGuards(SessionGuard)
-    @UsePipes(new ValidationPipe())
-    updateTourGuideByManager(@Param('tourGuideId', ParseIntPipe) tourGuideId:number, @Body() tourGuideUpdateInfo:TourGuideUpdateDTO, @Session() session) {
-        return this.managerService.updateTourGuideByManager(tourGuideId, tourGuideUpdateInfo, session.username);
+    addTourGuideToTraveller(@Query() travellerAndTourGuide:TravellerTourGuideDTO, @Session() session) {
+        return this.managerService.addTourGuideToTraveller(session.username, travellerAndTourGuide);
     }
 
     @Post('addhotel')
@@ -139,6 +162,15 @@ export class ManagerController {
         console.log(hotelDetails);
         return this.managerService.addHotel(hotelDetails, session.username);
     }
+
+    // @Put('updateinfo/tourguide/:tourGuideId')
+    // @UseGuards(SessionGuard)
+    // @UsePipes(new ValidationPipe())
+    // updateTourGuideByManager(@Param('tourGuideId', ParseIntPipe) tourGuideId:number, @Body() tourGuideUpdateInfo:TourGuideUpdateDTO, @Session() session) {
+    //     return this.managerService.updateTourGuideByManager(tourGuideId, tourGuideUpdateInfo, session.username);
+    // }
+
+
 
     //MANAGER can only delete TRAVELER where their ID is assocaited
     // @Delete('remove/traveler')

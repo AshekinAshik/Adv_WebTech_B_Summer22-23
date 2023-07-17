@@ -1,6 +1,6 @@
 import { Inject, Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { TravellerRegDTO } from "src/traveller/traveller.dto";
+import { TravellerRegDTO, TravellerTourGuideDTO, TravellerUpdateDTO } from "src/traveller/traveller.dto";
 import { TravellerEntity } from "src/traveller/traveller.entity";
 import { Repository } from "typeorm";
 import { DeleteQry, HotelDetailsDTO, ManagerInfoDTO, ManagerLoginDTO, ManagerMessageDTO, ManagerRegDTO, ManagerUpdateDTO } from "./manager.dto";
@@ -31,21 +31,6 @@ export class ManagerService {
         managerRegInfo.password = await bcrypt.hash(managerRegInfo.password, salt);
 
         return this.managerRepo.save(managerRegInfo);
-
-
-        //await this.addManagerInfo(managerRegInfo);
-
-        //return "Manager Registered!";
-
-        // const manager = await this.managerRepo.findOneBy({username:managerRegInfo.username});
-        // var managerInfo:ManagerInfoDTO;
-        // managerInfo.id = manager.id;
-        // managerInfo.name = managerRegInfo.name;
-        // managerInfo.email = managerRegInfo.email;
-        // managerInfo.contact = managerRegInfo.contact;
-        // await this.managerInfoRepo.save(managerInfo);
-
-        // return managerRegInfo;
     }
 
     async loginManager (managerLoginInfo:ManagerLoginDTO) {
@@ -54,16 +39,6 @@ export class ManagerService {
         const isMatch:boolean = await bcrypt.compare(managerLoginInfo.password, manager.password);
         console.log(isMatch);
         return isMatch;
-
-        // if(manager) {
-        //     const isMatch:boolean = await bcrypt.compare(managerLoginInfo.password, manager.password);
-        //     if (isMatch) {
-        //         return true;
-        //     } else {
-        //         return false;
-        //     }
-        // }
-        // return false;
     }
 
     async uploadManager (fileName:string, username:string) {
@@ -75,28 +50,6 @@ export class ManagerService {
             return "Manager Photo Uploaded!";
         }
         return "Manager Photo Couldn't be Uploaded!";
-    }
-
-    async regTraveller (travellerRegInfo:TravellerRegDTO, managerUsername:string) : Promise<TravellerEntity> {
-        const manager = await this.managerRepo.findOneBy({username:managerUsername});
-        //const traveller = await this.travellerRepo.findOneBy({username:travelerRegInfo.username});
-
-        travellerRegInfo.managerID = manager.id;
-
-        return this.travellerRepo.save(travellerRegInfo);
-    }
-
-    async getTravellerByManagerId (managerUsername:string) {
-        console.log(managerUsername);
-        const manager = await this.managerRepo.findOneBy({username:managerUsername});
-        const managerId = manager.id;
-
-        return this.managerRepo.find(
-            {
-                where: {id:managerId},
-                relations: {travellers:true}
-            }
-        ) 
     }
 
     async updateManagerInfo (managerUpdateInfo:ManagerUpdateDTO, managerUsername:string) : Promise<ManagerEntity> {
@@ -111,75 +64,72 @@ export class ManagerService {
         return this.managerRepo.findOneBy({id:manager.id});
     }
 
-    async removeManager (managerUsername:string) {
+    async regTraveller (travellerRegInfo:TravellerRegDTO, managerUsername:string) : Promise<TravellerEntity> {
         const manager = await this.managerRepo.findOneBy({username:managerUsername});
-        await this.managerRepo.delete(manager.id);
+        //const traveller = await this.travellerRepo.findOneBy({username:travelerRegInfo.username});
+
+        travellerRegInfo.managerID = manager.id;
+
+        return this.travellerRepo.save(travellerRegInfo);
+    }
+
+    async getTraveller (managerUsername:string) {
+        const manager = await this.managerRepo.findOneBy({username:managerUsername});
+        const managerId = manager.id;
+
+        return this.managerRepo.find(
+            {
+                where: {id:managerId},
+                relations: {travellers:true}
+            }
+        ) 
+    }
+
+    async getTravellerById (travellerId:number, managerUsername:string) {
+        //const manager = await this.managerRepo.findOneBy({username:managerUsername});
+        
+        return this.travellerRepo.findOneBy({id:travellerId});
+
+        // if(traveller.managerID == manager.id) {
+        //     return traveller;
+        // } else {
+        //     return "Traveller Not Found under this Manager!";
+        // }
+    }
+
+    // async removeManager (managerUsername:string) {
+    //     const manager = await this.managerRepo.findOneBy({username:managerUsername});
+    //     await this.managerRepo.delete(manager.id);
+    // }
+
+    async updateTraveller (travellerId:number, travellerUpdateInfo:TravellerUpdateDTO, managerUsername:string) {
+        const manager = await this.managerRepo.findOneBy({username:managerUsername});
+        const traveller = await this.travellerRepo.findOneBy({id:travellerId});
+
+        if (traveller.managerID == manager.id) {
+            await this.travellerRepo.update({id:traveller.id}, travellerUpdateInfo);
+        }
     }
 
     async removeTraveller (travellerId:number, managerUsername:string) {
         const traveller = await this.travellerRepo.findOneBy({id:travellerId});
         const manager = await this.managerRepo.findOneBy({username:managerUsername});
-        const managerId = manager.id;
 
-        if (traveller.managerID == managerId) {
+        if (traveller.managerID == manager.id) {
             await this.travellerRepo.delete(travellerId);
             return "Traveller Deleted!";
         } else {
             return "Couldn't Delete!";
         }
-
-
-        // const manager = await this.managerRepo.findOneBy({username:managerUsername});
-        // const managerId = manager.id;
-        
-        // const travellers = await this.managerRepo.find(
-        //     {
-        //         where: {id:managerId},
-        //         relations: {travellers:true}
-        //     }
-        // );
-
-        // //const traveler = await this.travellerRepo.findOneBy({id:travelerId});
-
-        // if ( !== managerId) {
-        //     throw new NotFoundException('this manager is not associated with the traveler!');
-        // } else {
-        //     await this.travellerRepo.delete(travelerId);
-        // }
     }
 
     async regTourGuide (tourguideRegInfo:TourGuideRegDTO, managerUsername:string) {
         const manager = await this.managerRepo.findOneBy({username:managerUsername});
 
-        const salt = await bcrypt.genSalt();
-        tourguideRegInfo.password = await bcrypt.hash(tourguideRegInfo.password, salt);
-
         const newTourGuide = await this.tourguideRepo.save(tourguideRegInfo);
         newTourGuide.managers = [manager];
 
         return this.tourguideRepo.save(newTourGuide);
-
-
-        // const salt = await bcrypt.genSalt();
-        // tourguideRegInfo.password = await bcrypt.hash(tourguideRegInfo.password, salt);
-
-        // const manager = await this.managerRepo.findOneBy({username:managerUsername});
-        // const managerId = manager.id;
-
-        // await this.tourguideRepo.save(tourguideRegInfo);
-
-        // const tourguide = await this.tourguideRepo.findOneBy({username:tourguideRegInfo.username});
-        // const tourguideId = tourguide.id;
-    }
-
-    async addManagerToTourGuide (managerId:number, tourguideId:number) {
-        const tourGuide = await this.tourguideRepo.findOneBy({id:tourguideId});
-        const manager = await this.managerRepo.findOneBy({id:managerId});
-
-        if (manager && tourGuide) {
-            manager.tourguides = [...manager.tourguides, tourGuide];
-            await this.managerRepo.save(manager);
-        }
     }
 
     async sendMailToTraveller (messageInfo:ManagerMessageDTO, managerUsername:string) {
@@ -189,7 +139,7 @@ export class ManagerService {
         await this.mailerService.sendMail(
             {
                 to: "krazzypagla@gmail.com",
-                subject: "From Manager: " + managerName,
+                subject: "Tour Manager " + managerName + " : " + messageInfo.subject,
                 text: messageInfo.message,
             }
         );
@@ -197,36 +147,23 @@ export class ManagerService {
 
     async getTourGuidesByManager (managerUsername:string) {
         const manager = await this.managerRepo.findOneBy({username:managerUsername});
-        const managerId = manager.id;
         
         return this.managerRepo.find(
             {
-                where:  {id:managerId},
+                where:  {id:manager.id},
                 relations:['tourguides']
             }
         );
     }
 
-    async updateTourGuideByManager (tourGuideId:number, tourGuideUpdateInfo:TourGuideUpdateDTO, managerUsername:string) {
+    async addTourGuideToTraveller (managerUsername:string, travellerAndTourGuide:TravellerTourGuideDTO) {
         const manager = await this.managerRepo.findOneBy({username:managerUsername});
-        const managerId = manager.id;
 
-        
+        const traveller = await this.travellerRepo.findOneBy({id:travellerAndTourGuide.id});
 
-        tourGuideUpdateInfo.id = tourGuideId;
-        //await this.tourguideRepo.update(tourGuideId, tourGuideUpdateInfo);
-        const tourGuide = manager.tourguides.find((guide) => guide.id === tourGuideId);
-
-        // console.log(tourGuide);
-        // tourGuide.name = tourGuideUpdateInfo.name;
-        // tourGuide.email = tourGuideUpdateInfo.email;
-        // tourGuide.contact = tourGuideUpdateInfo.contact;
-        // tourGuide.age = tourGuideUpdateInfo.age;
-        // tourGuide.location = tourGuideUpdateInfo.location;
-
-        // await this.tourguideRepo.save(tourGuide);
-
-        return "updated";
+        if(traveller.managerID == manager.id) {
+            await this.travellerRepo.update({id:travellerAndTourGuide.id}, travellerAndTourGuide);
+        }
     }
 
     async addHotel (hotelDetails:HotelDetailsDTO, managerUsername:string) {
@@ -234,6 +171,29 @@ export class ManagerService {
         hotelDetails.managerId = manager.id;
         return this.hotelRepo.save(hotelDetails);
     }
+
+
+
+    // async updateTourGuideByManager (tourGuideId:number, tourGuideUpdateInfo:TourGuideUpdateDTO, managerUsername:string) {
+    //     const manager = await this.managerRepo.findOneBy({username:managerUsername});
+    //     const managerId = manager.id;
+    //     const tg = manager.tourguides;
+    //     console.log(tg);
+    //     tourGuideUpdateInfo.id = tourGuideId;
+    //     //await this.tourguideRepo.update(tourGuideId, tourGuideUpdateInfo);
+    //     const tourGuide = manager.tourguides.find((guide) => guide.id === tourGuideId);
+
+    //     // console.log(tourGuide);
+    //     // tourGuide.name = tourGuideUpdateInfo.name;
+    //     // tourGuide.email = tourGuideUpdateInfo.email;
+    //     // tourGuide.contact = tourGuideUpdateInfo.contact;
+    //     // tourGuide.age = tourGuideUpdateInfo.age;
+    //     // tourGuide.location = tourGuideUpdateInfo.location;
+
+    //     // await this.tourguideRepo.save(tourGuide);
+
+    //     return "updated";
+    // }
 
     // async addManagerInfo (managerRegInfo:ManagerRegDTO) {
     //     //var managerInfo:ManagerInfoDTO = null;

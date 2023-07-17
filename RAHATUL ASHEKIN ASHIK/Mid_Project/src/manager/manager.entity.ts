@@ -2,30 +2,6 @@ import { TourGuideEntity } from "src/tourguide/tourguide.entity";
 import { TravellerEntity } from "src/traveller/traveller.entity";
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
 
-// @Entity('Manager_Info')
-// export class ManagerInfoEntity {
-//     @PrimaryColumn()
-//     id:number;
-//     @Column()
-//     name:string;
-//     @Column()
-//     email:string;
-//     @Column()
-//     contact:number;
-
-//     @ManyToMany(() => TourGuideEntity, tourguide => tourguide.managerinfos)
-//     @JoinTable(
-//         {
-//             name:'Manager_TourGuide',
-//             joinColumn: {
-//                 name:'managerID',
-//                 referencedColumnName: 'id'
-//             },
-//         }
-//     )
-//     tourguides: TourGuideEntity[];
-// }
-
 @Entity('Manager')
 export class ManagerEntity {
     @PrimaryGeneratedColumn()
@@ -60,6 +36,8 @@ export class ManagerEntity {
 
     @OneToMany(() => HotelEntity, hotel => hotel.manager)
         hotels:HotelEntity[];
+
+    
 }
 
 @Entity('Hotel')
