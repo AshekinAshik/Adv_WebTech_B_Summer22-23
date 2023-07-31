@@ -19,7 +19,12 @@ export default function Content(){
        <div>
          <p>If you are not register! <Link href="./admin/admin_reg">Register</Link></p>
          <p>Already have a account <Link href="./admin/admin_log">Log in</Link></p>
-         <img src="fahad.jpg" height="250" width="300"/>
+         <Image 
+            src="/fahad1.png" 
+            alt="Photo" 
+            height={250} 
+            width={300}
+         />
        </div>
         </div>
      </div>
