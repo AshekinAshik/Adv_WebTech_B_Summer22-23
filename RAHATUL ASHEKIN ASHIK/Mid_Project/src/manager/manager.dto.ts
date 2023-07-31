@@ -76,6 +76,10 @@ export class ManagerInfoDTO {
 }
 
 export class ManagerMessageDTO {
+    @IsString({message: "Invalid Subject!"})
+    @IsNotEmpty({message: "Subject Must be Filled!"})
+    subject:string;
+
     @IsString({message: "Invalid Message!"})
     message:string;
 }
