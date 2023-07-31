@@ -11,7 +11,7 @@ import { TravelerModule } from './traveller/traveler.module';
       host: 'localhost',
       port: 5432,
       username: 'postgres',
-      password: '@Shek1n.@Sh1k.postgreSQL',
+      password: '', //password that was used in PostgreSQL
       database: 'tour_management_db',
       autoLoadEntities: true,
       synchronize: true,

@@ -11,13 +11,13 @@ import { MailerModule } from "@nestjs-modules/mailer";
     imports:[TypeOrmModule.forFeature([TourGuideEntity,TravellerEntity,PaymentEntity,createTourPackEntity,createhotelandvehivleEntity,ManagerEntity]), MailerModule.forRoot(
         {
         transport:{
-            host:'stmp.gmail.com',
+            host:'smtp.gmail.com',
             port:465,
             ignoreTLS:true,
             secure:true,
             auth:{
                 user:'abidhasanahm151@gmail.com',
-                pass:'rquvipewweqkczpv'
+                pass:''// password that was generaed by app from Gmail
             }
         }
     }
