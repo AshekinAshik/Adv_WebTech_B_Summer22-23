@@ -1,55 +1,49 @@
-import Link from "next/link";
-import dynamic from "next/dynamic";
-import Layout from "./component/layout";
+const { useRouter } = require("next/router")
 
-export default function AddHotel () {
+const AddTourGuideForm = () => {
+    const router = useRouter();
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        router.push('/manager/addTourGuide');
+    };
+
     return (
         <>
-            <Layout title="Register Hotel"/>
-
-            <h1>TRIP CONNECT</h1>
-            <div>
-                <center>
-                    <Link href="updateManager">Update | </Link>
-                    <Link href="addTraveller"> Add Traveller | </Link>
-                    <Link href="viewTraveller"> View Traveller | </Link>
-                    <Link href="updateTraveller"> Modify Traveller | </Link>
-                    <Link href="removeTraveller"> Remove Traveller | </Link>
-                    <Link href="sendMail"> Mail | </Link>
-                    <Link href="addTourGuide"> Add Tour Guide | </Link>
-                    <Link href="viewTourGuide"> View Tour Guide | </Link>
-                    <Link href="assignTourGuide"> Assign Tour Guide | </Link>
-                    <Link href="addHotels"> Hotels | </Link>
-                    <Link href="signIn"> Logout | </Link>
-                </center>
-            </div>
-            <br></br><br></br>
-
-            <h2 align="center"> Hotel Information </h2>
+            <h2 align="center"> Tour Guide Information </h2>
             <div>
                 <br></br>
-                <form>
+                <form onSubmit={handleSubmit}>
                     <center>
                     <table>
                         <tr>
                             <td>NAME:</td>
-                            <td><input type="text" name="hotel_name" placeholder="hotel's name" required></input></td> 
+                            <td><input type="text" name="tourguide_name" placeholder="your name" required></input></td> 
+                        </tr>
+                        <br></br>
+                        <tr>
+                            <td>USERNAME:</td>
+                            <td><input type="text" name="tourguide_username" placeholder="your username" required></input></td> 
                         </tr>
                         <br></br>
                         <tr>
                             <td>E-MAIL:</td>
-                            <td><input type="text" name="hotel_email" placeholder="hotel's email" required></input></td> 
+                            <td><input type="text" name="tourguide_email" placeholder="your email" required></input></td> 
                         </tr>
                         <br></br>
                         <tr>
                             <td>CONTACT:</td>
-                            <td><input type="text" name="hotel_contact" placeholder="hotel's contact number" required></input></td> 
+                            <td><input type="text" name="tourguide_contact" placeholder="your contact number" required></input></td> 
+                        </tr>
+                        <br></br>
+                        <tr>
+                            <td>AGE:</td>
+                            <td><input type="number" name="tourguide_age" placeholder="your age" required></input></td> 
                         </tr>
                         <br></br>
                         <tr>
                             <td>LOCATION:</td>
-                            {/* <td><input type="text" name="hotel_password" placeholder="hotel's password" required></input></td> */}
-                            <select name="hotel_location">
+                            <select name="tourguide_location">
                                 <option value="Dhaka">Dhaka</option>
                                 <option value="Bagerhat">Bagerhat</option>
                                 <option value="Bandarban">Bandarban</option>
@@ -122,10 +116,12 @@ export default function AddHotel () {
 
                     <center>
                     <br></br>
-                    <input type="submit" name="hotel_add_submit" value="REGISTER"></input>
+                    <input type="submit" name="tourguide_register_submit" value="REGISTER"></input>
                     </center>
                 </form>
-            </div>
+            </div> 
         </>
     )
-}
+};
+
+export default AddTourGuideForm;

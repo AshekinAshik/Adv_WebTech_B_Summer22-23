@@ -1,33 +1,19 @@
-import Link from "next/link";
-import Layout from "./component/layout";
+import { useRouter } from "next/router";
 
-export default function AddTraveller () {
+const AddTravellerForm = () => {
+    const router = useRouter();
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        router.push('/manager/addTraveller');
+    };
+
     return (
         <>
-            <Layout title="Register Traveller"/>
-
-            <h1>TRIP CONNECT</h1>
-            <div>
-                <center>
-                    <Link href="updateManager">Update | </Link>
-                    <Link href="addTraveller"> Add Traveller | </Link>
-                    <Link href="viewTraveller"> View Traveller | </Link>
-                    <Link href="updateTraveller"> Modify Traveller | </Link>
-                    <Link href="removeTraveller"> Remove Traveller | </Link>
-                    <Link href="sendMail"> Mail | </Link>
-                    <Link href="addTourGuide"> Add Tour Guide | </Link>
-                    <Link href="viewTourGuide"> View Tour Guide | </Link>
-                    <Link href="assignTourGuide"> Assign Tour Guide | </Link>
-                    <Link href="addHotels"> Hotels | </Link>
-                    <Link href="signIn"> Logout | </Link>
-                </center>
-            </div>
-            <br></br><br></br>
-
             <h2 align="center"> Traveller Information </h2>
             <div>
                 <br></br>
-                <form>
+                <form onSubmit={handleSubmit}>
                     <center>
                     <table>
                         <tr>
@@ -77,4 +63,6 @@ export default function AddTraveller () {
             </div>
         </>
     )
-}
+};
+
+export default AddTravellerForm;
