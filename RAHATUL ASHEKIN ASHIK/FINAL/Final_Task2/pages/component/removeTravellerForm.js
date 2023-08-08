@@ -17,7 +17,7 @@ const RemoveTravellerForm = () => {
         console.log(travellerData);
         
         try {
-            const response = await axios.delete('http://localhost:3000/manager/remove/traveller/'+travellerData.travellerId);
+            const response = await axios.delete(process.env.NEXT_PUBLIC_API_BASE_URL+ '/remove/traveller/'+travellerData.travellerId);
             console.log(response.data);
             alert("Traveller Delete Successful!");
         } catch (error) {
@@ -41,7 +41,7 @@ const RemoveTravellerForm = () => {
 
                         <br></br>
                         {/* <input type="submit" name="traveller_remove" value="REMOVE"></input> */}
-                        <input type="submit" name="removebutton" value="Sign In"></input>
+                        <input type="submit" name="removebutton" value="REMOVE"></input>
                     </center>
                 </form>
             </div>

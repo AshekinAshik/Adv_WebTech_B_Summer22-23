@@ -10,7 +10,7 @@ const ViewTravellerTable = () => {
 
     const getTraveller = async () => {
         try {
-            const response = await axios.get('http://localhost:3000/manager/search/traveller');
+            const response = await axios.get(process.env.NEXT_PUBLIC_API_BASE_URL+ '/search/traveller');
             setTravellerData(response.data);
             console.log(response.data);
         } catch (error) {

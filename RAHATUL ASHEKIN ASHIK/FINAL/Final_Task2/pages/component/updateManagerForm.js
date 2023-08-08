@@ -21,7 +21,7 @@ const UpdateManagerForm = () => {
         console.log(updateManagerForm);
 
         try {
-            const response = await axios.put('http://localhost:3000/manager/updateinfo', updateManagerForm);
+            const response = await axios.put(process.env.NEXT_PUBLIC_API_BASE_URL+ '/updateinfo', updateManagerForm);
             console.log(response.data);
             alert("Manager Update Successful!");
         } catch (error) {

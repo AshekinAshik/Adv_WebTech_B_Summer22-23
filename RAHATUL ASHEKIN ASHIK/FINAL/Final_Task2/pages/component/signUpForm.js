@@ -27,7 +27,7 @@ const SignUpForm = () => {
     console.log(signUpForm);
 
     try {
-      const response = await axios.post('http://localhost:3000/manager/register', signUpForm, {
+      const response = await axios.post(process.env.NEXT_PUBLIC_API_BASE_URL+ '/register', signUpForm, {
         headers: {
           'Content-Type': 'application/json'
         }

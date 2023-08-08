@@ -8,7 +8,7 @@ const MyHeader = (props) => {
                 <title>{props.title}</title>
             </Head>
             
-            <Link href="/"> <h1 align="center">TRIP CONNECT</h1> </Link>
+            <Link href="/manager"> <h1 align="center">TRIP CONNECT</h1> </Link>
             <br></br> <br></br>
 
             <div>
