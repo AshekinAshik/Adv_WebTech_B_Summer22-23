@@ -6,28 +6,28 @@ import { Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColum
 @Entity('admin')
 export class AdminEntity {
     @PrimaryGeneratedColumn()
-    id:number;
-    @Column({length:150})
-    fastname:string;
-    @Column({length:80})
-    lastname:string;
-    @Column({unique:true})
-    email:string;
+    id: number;
+    @Column({ length: 150 })
+    fastname: string;
+    @Column({ length: 80 })
+    lastname: string;
+    @Column({ unique: true })
+    email: string;
     @Column()
-    contact:number;
+    contact: number;
     @Column()
-    password:string;
-    @Column({nullable:true})
-    filename:string;
+    password: string;
+    @Column({ nullable: true })
+    filename: string;
 
-    @OneToMany(() => ManagerEntity, manager => manager.admin, {cascade: ["remove"]})
-    manager:ManagerEntity[];
+    @OneToMany(() => ManagerEntity, manager => manager.admin, { cascade: ["remove"] })
+    manager: ManagerEntity[];
 
-    @OneToMany(() => TravelerEntity, traveler => traveler.admin, {cascade: ["remove"]})
-    traveler:TravelerEntity[];
+    @OneToMany(() => TravelerEntity, traveler => traveler.admin, { cascade: ["remove"] })
+    traveler: TravelerEntity[];
 
-    @OneToMany(() => TourGuidEntity, tourguid => tourguid.admin, {cascade: ["remove"]})
-    tourguid:TourGuidEntity[];
+    @OneToMany(() => TourGuidEntity, tourguid => tourguid.admin, { cascade: ["remove"] })
+    tourguid: TourGuidEntity[];
 
     @ManyToMany(() => ManagerEntity, manager => manager.admin)
     @JoinTable()
