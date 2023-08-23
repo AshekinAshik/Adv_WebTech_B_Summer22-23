@@ -1,5 +1,6 @@
 import Layout from "../layout/layout";
 
+
 const Home = () => {
   return (
     <>

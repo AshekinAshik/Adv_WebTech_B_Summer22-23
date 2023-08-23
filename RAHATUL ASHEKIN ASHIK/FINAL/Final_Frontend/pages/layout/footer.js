@@ -19,9 +19,7 @@ const MyFooter = () => {
                         <Link href="#" class="hover:underline">Contact</Link>
                     </li>
                 </ul>
-                {/* </div> */}
             </footer>
-
         </>
     )
 };

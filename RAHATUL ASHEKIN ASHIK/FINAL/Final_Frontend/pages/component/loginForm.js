@@ -93,32 +93,30 @@ const LoginForm = () => {
     <>
       <SessionCheck />
 
-      <div class="container mx-auto px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-gray-700/50 to-gray-500/75 rounded-xl w-80">
-        <div class="flex flex-wrap justify-center">
-          <div class="w-full">
+      <div class="flex flex-wrap justify-center">
+        <div class="w-80">
 
-            <form class="mt-4" onSubmit={handleSubmit}>
-              <div class="mb-6">
-                <label for="username" class="block mb-2 text-sm font-medium text-white">Username</label>
-                <input type="text" id="username" name="username" value={username} onChange={handleUsernameChange} class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
-              </div>
-              <div class="mb-6">
-                <label for="password" class="block mb-2 text-sm font-medium text-white">Password</label>
-                <input type="password" id="password" name="password" value={password} onChange={handlePasswordChange} class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
-              </div>
+          <form class="mt-4" onSubmit={handleSubmit}>
+            <div class="mb-6">
+              <label for="username" class="block mb-2 text-sm font-medium text-white">Username</label>
+              <input type="text" id="username" name="username" value={username} onChange={handleUsernameChange} class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
+            </div>
+            <div class="mb-6">
+              <label for="password" class="block mb-2 text-sm font-medium text-white">Password</label>
+              <input type="password" id="password" name="password" value={password} onChange={handlePasswordChange} class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
+            </div>
 
-              <div>
-                {error && <p class="text-center text-red-500">{error}</p>}
-                <br></br>
-              </div>
+            <div>
+              {error && <p class="text-center font-bold text-red-500">{error}</p>}
+              <br></br>
+            </div>
 
-              <center>
-                <button type="submit" class="text-white bg-green-500 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Sign In</button>
-                <br></br><br></br>
-                <Link href="../manager/register" class="font-medium text-blue-400 dark:text-blue-500 hover:underline">Not Registered?</Link>
-              </center>
-            </form>
-          </div>
+            <center>
+              <button type="submit" class="text-white bg-green-500 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Sign In</button>
+              <br></br><br></br>
+              <Link href="../manager/register" class="font-medium text-blue-400 dark:text-blue-500 hover:underline">Not Registered?</Link>
+            </center>
+          </form>
         </div>
       </div>
     </>

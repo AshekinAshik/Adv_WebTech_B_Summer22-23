@@ -1,3 +1,21 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.bts:hover{
+    background-color: black !important;
+    color: white !important;
+}
+
+.cardcss{
+    width: 230px;
+    height: auto;
+    color: black;
+    text-align: center;
+    border-radius: 10%;
+
+}
+
+.gf{
+    text-align: -webkit-center;
+}

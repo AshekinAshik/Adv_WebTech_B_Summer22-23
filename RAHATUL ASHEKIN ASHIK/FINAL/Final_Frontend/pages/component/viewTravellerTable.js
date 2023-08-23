@@ -28,20 +28,20 @@ const ViewTravellerTable = () => {
         }
     };
 
-    const handleRemove = async (e) => {
-        const travellerId = e.target.id;
-        console.log(travellerId);
+    // const handleRemove = async (e) => {
+    //     const travellerId = e.target.id;
+    //     console.log(travellerId);
 
-        try {
-            const response = await axios.delete(process.env.NEXT_PUBLIC_API_BASE_URL + '/remove/traveller/' + travellerId);
-            console.log(response.data);
-            alert("Traveller Delete Successful!");
-            router.push('/manager/viewTraveller');
-        } catch (error) {
-            console.error(error);
-            alert("Traveller Delete Failed!");
-        }
-    };
+    //     try {
+    //         const response = await axios.delete(process.env.NEXT_PUBLIC_API_BASE_URL + '/remove/traveller/' + travellerId);
+    //         console.log(response.data);
+    //         alert("Traveller Delete Successful!");
+    //         router.push('/manager/viewTraveller');
+    //     } catch (error) {
+    //         console.error(error);
+    //         alert("Traveller Delete Failed!");
+    //     }
+    // };
 
     return (
         <>
@@ -50,7 +50,8 @@ const ViewTravellerTable = () => {
             <br></br> <br></br>
             <div>
                 <center>
-                    <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+                    <p className="mt-6 ml-6"> All Traveller </p>
+                    {/* <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
                         <table class="w-full text-sm text-center text-gray-800 dark:text-gray-400">
                             <thead class="text-extrabold text-gray-700 uppercase bg-gray-300 dark:bg-gray-700 dark:text-gray-400">
                                 <tr>
@@ -110,7 +111,34 @@ const ViewTravellerTable = () => {
                                 ))}
                             </tbody>
                         </table>
-                    </div>
+                    </div> */}
+
+                    {travellerData !== null && (
+                        <div>
+                            {Array.isArray(travellerData) ? (
+                                <div>
+
+                                    <p className="mt-6 ml-6" >All Traveller List: </p>
+                                    <ol>
+                                        {travellerData.map((item, index) => (
+                                            <li key={index}>
+
+                                                <Link className="w-48 ml-6 h-auto bg-slate-500 block text-center mt-6" href={"" + item.id}> Name : {item.name} <p className="text-red-600">More info</p></Link>
+
+                                                <br></br>
+                                            </li>
+                                        ))}
+                                    </ol>
+                                </div>
+                            ) : (
+                                <div>
+                                    <p>Response is an object:</p>
+                                    <p>{travellerData}</p>
+                                </div>
+                            )}
+                            <Link className=" ml-6 focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800" href="add_manager">Add More Manager</Link><br></br><br></br>
+                        </div>
+                    )}
 
                 </center>
             </div>
