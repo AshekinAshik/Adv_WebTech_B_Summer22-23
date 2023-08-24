@@ -19,7 +19,7 @@ import { Module } from "@nestjs/common";
                 secure: true,
                 auth: {
                     user: 'fk1946674@gmail.com',
-                    pass: 'zknwalzanfrnejgi'
+                    pass: 'kqmmiemjikwctans'
                 }
             }
         })
