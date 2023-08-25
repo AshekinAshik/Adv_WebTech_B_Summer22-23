@@ -7,9 +7,9 @@ const DynamicManagerProfile = dynamic(() => import('../component/managerProfileF
 const ManagerProfile = () => {
     return (
         <>
-            <Layout title="Profile">
-                <SessionCheck />
+            {/* <SessionCheck /> */}
 
+            <Layout title="Profile">
                 <div>
                     <DynamicManagerProfile />
                 </div>

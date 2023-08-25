@@ -1,17 +1,18 @@
 import dynamic from "next/dynamic";
 import Layout from "../layout/layout";
+import SessionCheck from "../utils/sessionCheck";
 
 const DynamicUpdateManager = dynamic(() => import('../component/updateManagerForm'), { ssr: false });
 
 const UpdateManagerPage = () => {
     return (
         <>
-            <Layout title="Update Manager">
+            {/* <SessionCheck /> */}
 
+            <Layout title="Update Manager">
                 <div>
                     <DynamicUpdateManager />
                 </div>
-
             </Layout>
         </>
     )

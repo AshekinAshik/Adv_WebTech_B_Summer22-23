@@ -2,20 +2,22 @@ import dynamic from "next/dynamic";
 import Layout from "../layout/layout";
 import SessionCheck from "../utils/sessionCheck";
 
-const DynamicUploadFile = dynamic(import('../component/uploadFile'));
+const DynamicUpload = dynamic(() => import('../component/uploadFile'), { ssr: false });
 
-const UploadFileManager = () => {
+const AddHotelsPage = () => {
     return (
         <>
             {/* <SessionCheck /> */}
 
-            <Layout title="File Upload - Manager">
+            <Layout title="Register Hotels">
+
                 <div>
-                    <DynamicUploadFile />
+                    <DynamicUpload />
                 </div>
+
             </Layout>
         </>
     )
 };
 
-export default UploadFileManager;
+export default AddHotelsPage;

@@ -10,14 +10,13 @@ const UpdateManagerForm = () => {
         contact: 0,
         password: "",
     });
-
-    // const [photoFileName, setPhotoFileName] = useState('');
-    // const handleChangePhoto = (e) => {
-    //     setPhotoFileName(e.target.value);
-    // };
-
     const handleChange = (e) => {
         setUpdateManagerFormData({ ...updateManagerForm, [e.target.name]: e.target.value });
+    };
+
+    const [file, setFile] = useState(null);
+    const handleFileChange = (e) => {
+        setFile(e.target.files[0]);
     };
 
     const handleSubmit = async (e) => {
@@ -26,16 +25,21 @@ const UpdateManagerForm = () => {
         updateManagerForm.contact = parseInt(updateManagerForm.contact);
         console.log(updateManagerForm);
 
+        const formData = new FormData();
+        formData.append('image', file);
+
         try {
             const response = await axios.put(process.env.NEXT_PUBLIC_API_BASE_URL + '/updateinfo', updateManagerForm,
                 {
                     withCredentials: true
                 });
 
-            // const responsePhoto = await axios.put(process.env.NEXT_PUBLIC_API_BASE_URL + '/upload', photoFileName,
-            //     {
-            //         withCredentials: true
-            //     });
+            const responseFile = await axios.put(process.env.NEXT_PUBLIC_API_BASE_URL + '/upload', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+                withCredentials: true
+            });
 
             console.log(response.data);
             // console.log(responsePhoto.data);
@@ -49,7 +53,7 @@ const UpdateManagerForm = () => {
 
     return (
         <>
-            <SessionCheck />
+            {/* <SessionCheck /> */}
 
             <br></br> <br></br>
             <div class="flex flex-wrap justify-center">
@@ -74,7 +78,7 @@ const UpdateManagerForm = () => {
                         </div>
                         <div class="mb-6">
                             <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="file_input">Upload Image File</label>
-                            <input id="file_input" type="file" name="photoFileName" class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" aria-describedby="file_input_help" />
+                            <input id="file_input" type="file" accept=".jpg, .jpeg, .png, .webp, .gif" onChange={handleFileChange} class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" aria-describedby="file_input_help" />
                             <p class="mt-1 text-sm text-gray-500 dark:text-gray-300" id="file_input_help">PNG, JPG, JPEG, WEBP or GIF (MAX. 300kb).</p>
                         </div>
 

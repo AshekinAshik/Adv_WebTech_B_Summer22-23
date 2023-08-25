@@ -34,7 +34,8 @@ const RemoveTravellerForm = () => {
 
     return (
         <>
-            <SessionCheck />
+            {/* <SessionCheck /> */}
+
             <h2 align="center"> Removal Information </h2>
 
             <div>

@@ -47,7 +47,8 @@ const Travellers = () => {
         if (travellers) {
             return (
                 <>
-                    <SessionCheck />
+                    {/* <SessionCheck /> */}
+
                     <Layout title="Traveller Data">
                         <div className=" gf mt-8">
 

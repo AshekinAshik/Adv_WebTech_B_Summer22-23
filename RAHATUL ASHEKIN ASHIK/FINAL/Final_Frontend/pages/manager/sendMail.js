@@ -1,17 +1,18 @@
 import Layout from "../layout/layout";
 import dynamic from "next/dynamic";
+import SessionCheck from "../utils/sessionCheck";
 
 const DynamicSendMailForm = dynamic(() => import('../component/sendMailForm'), {ssr:false});
 
 const SendMailPage = () => {
     return (
         <>
-            <Layout title="Send Mail">
+            {/* <SessionCheck /> */}
 
+            <Layout title="Send Mail">
             <div>
                 <DynamicSendMailForm />
             </div>
-
             </Layout>
         </>
     )
