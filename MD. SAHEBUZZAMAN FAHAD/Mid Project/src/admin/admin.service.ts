@@ -234,7 +234,7 @@ export class AdminService {
             await this.managerrepo.delete(managerId);
             return "manager Deleted!";
         } else {
-            return "Couldn't Delete!";
+            return adminId;
 
         }
     }
@@ -274,10 +274,11 @@ export class AdminService {
         const admin = await this.adminRepo.findOneBy({ email: adminEmail });
         const adminName = admin.lastname;
 
+
         await this.mailerService.sendMail(
             {
-                to: "fk1946674@gmail.com",
-                subject: "From Admin: " + adminName,
+                to: messageData.receiver,
+                subject: "From Admin: " + adminName + " : " + messageData.subject,
                 text: messageData.message,
             }
         );
