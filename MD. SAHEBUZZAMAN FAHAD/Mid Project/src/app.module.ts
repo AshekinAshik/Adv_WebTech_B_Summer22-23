@@ -2,14 +2,15 @@ import { Module } from '@nestjs/common';
 import { AdminModule } from './admin/admin.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
+
 @Module({
   imports: [AdminModule,TypeOrmModule.forRoot({ 
     type: 'postgres',
     host: 'localhost',
-    port: 5433,
+    port: 5432,
     username: 'postgres',
     password: 'root',
-    database: 'admin',
+    database: 'admin1',
     autoLoadEntities: true,
     synchronize: true,
     })
