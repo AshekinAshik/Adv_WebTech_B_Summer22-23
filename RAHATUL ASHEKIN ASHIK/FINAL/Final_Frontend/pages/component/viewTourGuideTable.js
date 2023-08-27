@@ -26,7 +26,7 @@ const ViewTourGuideTable = () => {
 
     return (
         <>
-            <SessionCheck />
+            {/* <SessionCheck /> */}
             
             <br></br> <br></br>
             <div>

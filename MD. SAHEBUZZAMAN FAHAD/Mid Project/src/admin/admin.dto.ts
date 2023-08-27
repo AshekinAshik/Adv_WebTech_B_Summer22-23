@@ -74,12 +74,15 @@ export class AdminInfoDto {
 
     @IsInt({ message: "Invalid Contact!" })
     contact: number;
-
-
-
 }
 
 export class AdminMessageDTO {
     @IsString({ message: "Sent a valid Message" })
     message: string;
+
+    @IsString()
+    subject : string;
+
+    @IsEmail()
+    receiver : string;
 }

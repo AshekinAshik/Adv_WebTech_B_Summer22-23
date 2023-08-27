@@ -40,7 +40,7 @@ const AddHotelsForm = () => {
 
     return (
         <>
-            <SessionCheck />
+            {/* <SessionCheck /> */}
 
             <br></br> <br></br>
             <div class="flex flex-wrap justify-center">

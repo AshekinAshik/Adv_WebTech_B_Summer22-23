@@ -1,9 +1,12 @@
 import Layout from "../layout/layout";
+import SessionCheck from "../utils/sessionCheck";
 
 
 const Home = () => {
   return (
     <>
+      {/* <SessionCheck /> */}
+
       <Layout title="Home">
 
         <div class="px-2 mx-auto max-w-screen-xl text-center py-24 lg:py-56">

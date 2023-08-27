@@ -7,11 +7,9 @@ const ViewTravellerPage = () => {
     return (
         <>
             <Layout title="View Traveller">
-
                 <div>
                     <DynamicViewTravellerTable />
                 </div>
-
             </Layout>
         </>
     )

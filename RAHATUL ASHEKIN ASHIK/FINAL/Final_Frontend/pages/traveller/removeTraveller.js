@@ -7,11 +7,9 @@ const RemoveTravellerPage = () => {
     return (
         <>
             <Layout title="Remove Traveller">
-
                 <div>
                     <DynamicRemoveTravellerForm />
                 </div>
-
             </Layout>
         </>
     )

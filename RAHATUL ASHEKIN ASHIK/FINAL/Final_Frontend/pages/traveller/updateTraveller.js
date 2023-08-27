@@ -7,11 +7,9 @@ const UpdateTravellerPage = () => {
     return (
         <>
             <Layout title="Update Traveller">
-
                 <div>
                     <DynamicUpdateTraveller />
                 </div>
-
             </Layout>
         </>
     )
