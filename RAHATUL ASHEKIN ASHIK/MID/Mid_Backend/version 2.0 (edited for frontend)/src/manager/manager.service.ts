@@ -3,7 +3,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { TravellerRegDTO, TravellerTourGuideDTO, TravellerUpdateDTO } from "src/traveller/traveller.dto";
 import { TravellerEntity } from "src/traveller/traveller.entity";
 import { Repository } from "typeorm";
-import { DeleteQry, HotelDetailsDTO, ManagerInfoDTO, ManagerLoginDTO, ManagerMessageDTO, ManagerRegDTO, ManagerUpdateDTO } from "./manager.dto";
+import { DeleteQry, HotelDetailsDTO, ManagerFileDTO, ManagerInfoDTO, ManagerLoginDTO, ManagerMessageDTO, ManagerRegDTO, ManagerUpdateDTO } from "./manager.dto";
 import { HotelEntity, ManagerEntity } from "./manager.entity";
 import * as bcrypt from 'bcrypt';
 import { TourGuideRegDTO, TourGuideUpdateDTO } from "src/tourguide/tourguide.dto";
@@ -44,15 +44,22 @@ export class ManagerService {
         }
     }
 
-    async uploadManager(fileName: string, username: string) {
-        const manager = await this.managerRepo.findOneBy({ username: username });
-        console.log(username);
+    async uploadManager(fileName: string, managerUsername: string) {
+        const manager = await this.managerRepo.findOneBy({ username: managerUsername });
+        console.log(managerUsername);
         if (manager) {
             manager.photoFileName = fileName;
             await this.managerRepo.save(manager);
+            console.log("uploaded");
             return "Manager Photo Uploaded!";
         }
         return "Manager Photo Couldn't be Uploaded!";
+    }
+
+    async getFileByManager(managerFileInfo:number)  {
+        const manager = await this.managerRepo.findOneBy({id: managerFileInfo});
+        console.log(manager.id);
+        return manager.photoFileName;
     }
 
     async updateManagerInfo(managerUpdateInfo: ManagerUpdateDTO, managerUsername: string): Promise<ManagerEntity> {
@@ -65,6 +72,12 @@ export class ManagerService {
         await this.managerRepo.update({ id: manager.id }, managerUpdateInfo);
         console.log("update!");
         return this.managerRepo.findOneBy({ id: manager.id });
+    }
+
+    async viewManagerProfile(managerUsername:string) {
+        const manager = await this.managerRepo.findOneBy({username: managerUsername});
+
+        return manager;
     }
 
     async regTraveller(travellerRegInfo: TravellerRegDTO, managerUsername: string): Promise<TravellerEntity> {
@@ -140,11 +153,24 @@ export class ManagerService {
 
         if (traveller.id == travellerId) {
             await this.travellerRepo.delete(travellerId);
-            return "Traveller Deleted!";
+            return "Traveller Delete Successful";
         } else {
-            return "Couldn't Delete!";
+            return "Traveller Delete Failed!";
         }
     }
+    
+    //not completed
+    // async removeTourGuide(tourguideId: number, managerUsername: string) {
+    //     const tourguide = await this.tourguideRepo.findOneBy({ id: tourguideId });
+    //     const manager = await this.managerRepo.findOneBy({ username: managerUsername });
+
+    //     if (tourguide.id == tourguideId) {
+    //         await this.tourguideRepo.delete(tourguideId);
+    //         return "Tour Guide Delete Successful";
+    //     } else {
+    //         return "Tour Guide Delete Failed!";
+    //     }
+    // }
 
     async regTourGuide(tourguideRegInfo: TourGuideRegDTO, managerUsername: string) {
         const manager = await this.managerRepo.findOneBy({ username: managerUsername });

@@ -6,7 +6,7 @@ import { diskStorage, MulterError } from "multer";
 import { TourGuideRegDTO, TourGuideUpdateDTO } from "src/tourguide/tourguide.dto";
 import { TravellerRegDTO, TravellerTourGuideDTO, TravellerUpdateDTO } from "src/traveller/traveller.dto";
 import { TravellerEntity } from "src/traveller/traveller.entity";
-import { addManagerToTourGuideDTO, HotelDetailsDTO, ManagerLoginDTO, ManagerMessageDTO, ManagerRegDTO, ManagerUpdateDTO } from "./manager.dto";
+import { addManagerToTourGuideDTO, HotelDetailsDTO, ManagerFileDTO, ManagerLoginDTO, ManagerMessageDTO, ManagerRegDTO, ManagerUpdateDTO } from "./manager.dto";
 import { ManagerService } from "./manager.service";
 import { SessionGuard } from "./session.guard";
 
@@ -50,7 +50,7 @@ export class ManagerController {
     }
 
     @Put('upload')
-    @UseGuards(SessionGuard)
+    // @UseGuards(SessionGuard)
     @UseInterceptors(FileInterceptor('image',
         {
             fileFilter: (req, file, cb) => {
@@ -64,15 +64,41 @@ export class ManagerController {
             storage: diskStorage({
                 destination: './uploads',
                 filename: function (req, file, cb) {
-                    cb(null, Date.now() + file.originalname)
+                    cb(null, file.originalname)
+                    // cb(null, date.now() + file.originalname)
                 },
             })
         }))
     uploadManager(@UploadedFile() photoObj: Express.Multer.File, @Session() session) {
-        console.log(photoObj.filename);
+        //console.log(photoObj.filename);
         const fileName = photoObj.filename;
+        console.log(fileName);
         return this.managerService.uploadManager(fileName, session.username);
     }
+
+    @Get('getfile/:managerUsername')
+    // @UseGuards(SessionGuard)
+    async getFileByManager(@Param("managerUsername", ParseIntPipe) managerUsername:number, @Session() session, @Res() res) {
+        const fileName = await this.managerService.getFileByManager(managerUsername);
+
+        if (fileName !== null) {
+            console.log("true");
+            res.sendFile(fileName, {root: './uploads'})
+        }
+        return false;
+    }
+
+    // @Get('getfile')
+    // // @UseGuards(SessionGuard)
+    // async getFileByManager(@Body() managerUsername:ManagerFileDTO, @Session() session, @Res() res) {
+    //     const fileName = await this.managerService.getFileByManager(managerUsername);
+
+    //     if (fileName !== null) {
+    //         console.log("true");
+    //         res.sendFile(fileName, {root: './uploads'})
+    //     }
+    //     return false;
+    // }
 
     @Put('updateinfo')
     @UsePipes(new ValidationPipe())
@@ -150,6 +176,14 @@ export class ManagerController {
 
         // return "Traveller Delete Successful!";
     }
+
+    // @Delete('remove/tourguide/:tourguideId')
+    // // @UseGuards(SessionGuard)
+    // removeTourGuide(@Param('tourguideId', ParseIntPipe) tourguideId: number, @Session() session): any {
+    //     return this.managerService.removeTourGuide(tourguideId, session.username);
+
+    //     // return "Traveller Delete Successful!";
+    // }
 
     @Post('sendmail/traveller')
     // @UseGuards(SessionGuard)

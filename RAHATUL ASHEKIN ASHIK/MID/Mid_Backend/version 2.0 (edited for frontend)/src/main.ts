@@ -13,7 +13,7 @@ async function bootstrap() {
       cookie: {
         secure: false, //sent from http connection
         httpOnly: false,
-        maxAge: 600000 //ms
+        maxAge: 1200000 //ms
       }
     }),
   );

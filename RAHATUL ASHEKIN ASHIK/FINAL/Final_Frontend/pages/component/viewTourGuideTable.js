@@ -24,6 +24,21 @@ const ViewTourGuideTable = () => {
         }
     };
 
+    const handleRemove = async (e) => {
+        const travellerId = e.target.id;
+        console.log(travellerId);
+
+        try {
+            const response = await axios.delete(process.env.NEXT_PUBLIC_API_BASE_URL + '/remove/traveller/' + travellerId);
+            console.log(response.data);
+            alert("Traveller Delete Successful!");
+            router.push('/manager/viewTraveller');
+        } catch (error) {
+            console.error(error);
+            alert("Traveller Delete Failed!");
+        }
+    };
+
     return (
         <>
             {/* <SessionCheck /> */}

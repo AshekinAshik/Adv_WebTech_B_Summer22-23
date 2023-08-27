@@ -52,12 +52,15 @@ const Travellers = () => {
                     <Layout title="Traveller Data">
                         <div className=" gf mt-8">
 
-                            <div class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+                            <div class="w-full max-w-sm  bg-green-100 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
                                 <div class="flex justify-end px-4 pt-4">
 
                                 </div>
                                 <div class="flex flex-col items-center pb-10">
-                                    <Link className="text-black text-left bts" href="../traveller/viewTraveller"> Back</Link>
+                                    <Link href="../traveller/viewTraveller">
+                                        <button type="button" class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-2.5 py-1 mr-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">Back</button>
+                                    </Link>
+
                                     <h1 className="text-black p-2 text-2xl">Traveller Profile</h1>
                                     <img class="w-24 h-24 mb-3 rounded-full shadow-lg" src="/travel.png" alt="traveller image" />
                                     <h5 class="mb-1 text-xl font-medium text-gray-900 dark:text-white">{travellers.name}</h5>

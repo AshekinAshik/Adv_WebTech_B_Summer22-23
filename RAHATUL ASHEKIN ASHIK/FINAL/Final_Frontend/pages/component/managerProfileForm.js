@@ -26,17 +26,31 @@ const ManagerProfileForm = () => {
         }
     };
 
+    const managerFile = (managerData) => {
+        return (
+            <div>
+              
+                <img class="h-80 max-w-full rounded-full" src={process.env.NEXT_PUBLIC_API_BASE_URL + '/getfile/' + managerData.id} />
+
+            </div>
+        );
+    }
+
     return (
         <>
             <br></br> <br></br>
             <div>
                 <center>
 
-                    <div class="w-80 bg-green-100 border border-gray-200 rounded-lg shadow-xl dark:bg-gray-800 dark:border-gray-700">
+                    <div class="w-96 bg-green-100 border border-gray-200 rounded-lg shadow-xl dark:bg-gray-800 dark:border-gray-700">
                         <br></br>
 
                         <div class="flex flex-col items-center pb-10">
-                            <img class="w-26 h-32 mb-3 rounded-full shadow-xl" src="/travel.png" alt="Manager Image" />
+                            {/* <img class="w-26 h-32 mb-3 rounded-full shadow-xl" src={managerFile(managerData)} alt="Manager Image" /> */}
+                            <div>
+                                {managerFile(managerData)}
+                            </div>
+                            <br></br>
                             <h5 class="mb-1 text-xl font-medium text-gray-900 dark:text-white">{managerData.name}</h5>
                             <center>
                                 <p>@{managerData.username} </p>

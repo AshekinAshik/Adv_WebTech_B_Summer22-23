@@ -60,6 +60,13 @@ export class ManagerUpdateDTO {
     password:string;
 }
 
+export class ManagerFileDTO {
+    @IsString({message: "Invalid Name"})
+    @Matches(/^[a-zA-Z0-9@._$]+$/, {message:"Use Valid Username Format"})
+    @IsNotEmpty({message: "Username Must be Filled!"})
+    username:string;
+}
+
 export class ManagerInfoDTO {
     id:number;
 
@@ -76,7 +83,7 @@ export class ManagerInfoDTO {
 }
 
 export class ManagerMessageDTO {
-    @IsString({message: "Invalid Receiver!"})
+    @IsEmail({}, {message: "Invalid E-mail!"})
     @IsNotEmpty({message: "Receiver Must be Filled!"})
     receiver:string;
 
